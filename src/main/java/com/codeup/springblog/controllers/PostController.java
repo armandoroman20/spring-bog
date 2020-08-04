@@ -1,6 +1,8 @@
 package com.codeup.springblog.controllers;
 
 import com.codeup.springblog.models.Post;
+import com.codeup.springblog.repositories.AdRepository;
+import com.codeup.springblog.repositories.PostRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +11,14 @@ import java.util.ArrayList;
 
 @Controller
 public class PostController {
+
+    private final PostRepository postsDao;
+
+    public PostController(PostRepository postsDao){
+        this.postsDao = postsDao;
+    }
+
+    // still need to refactor method like I have them in the ADController
 
     @GetMapping("/posts")
     public String index(Model model) {
