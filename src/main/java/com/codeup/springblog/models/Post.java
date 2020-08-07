@@ -1,10 +1,15 @@
 package com.codeup.springblog.models;
 
+import com.codeup.springblog.repositories.PostRepository;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "posts")
 public class Post {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +21,44 @@ public class Post {
     @Column(columnDefinition = "TEXT NOT NULL")
     private String body;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User author;
+
+    public Post(String title, String body) {
+        this.title = title;
+        this.body = body;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
     public Post() {}
 
     public Post(long id, String title, String body) {
         this.id = id;
         this.title = title;
         this.body = body;
+    }
+
+    public Post(String title, String body, User author) {
+        this.title = title;
+        this.body = body;
+        this.author = author;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -39,4 +76,5 @@ public class Post {
     public void setBody(String body) {
         this.body = body;
     }
+
 }

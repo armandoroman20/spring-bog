@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <main class ="container mt-5"></main>
+
+    <h1>Create Ad</h1>
+    <!-- WITHOUT form model binding -->
+<!--    <form action="/ads/create" method="post">-->
+<!--        Title:-->
+<!--        <input name="title" />-->
+<!--        <br />-->
+<!--        Description:-->
+<!--        <input name="description" />-->
+<!--        <br />-->
+<!--        <input type="submit" />-->
+<!--    </form>-->
+
+    <form action="/ads/create" method="post" th:object="${ad}">
+        <div class="form-group">
+            <label for="title">Title</label>
+<!--            "*{title}" and "*{description}" were defined in the Ad.java model-->
+            <input type="text" class="form-control" id="title" th:field="*{title}">
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" class="form-control" id="description" th:field="*{description}">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</body>
+</html>

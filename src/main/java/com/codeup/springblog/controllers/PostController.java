@@ -1,56 +1,82 @@
 package com.codeup.springblog.controllers;
 
+import com.codeup.springblog.models.Ad;
 import com.codeup.springblog.models.Post;
-import com.codeup.springblog.repositories.AdRepository;
+import com.codeup.springblog.models.User;
 import com.codeup.springblog.repositories.PostRepository;
+import com.codeup.springblog.repositories.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 
 @Controller
 public class PostController {
 
     private final PostRepository postsDao;
+    private final UserRepository usersDao;
 
-    public PostController(PostRepository postsDao){
+    public PostController(PostRepository postsDao, UserRepository usersDao){
         this.postsDao = postsDao;
+        this.usersDao = usersDao;
     }
+
+
 
     // still need to refactor method like I have them in the ADController
-
     @GetMapping("/posts")
+//    public List<Post> getPosts () { return postsDao.findAll(); }
     public String index(Model model) {
-        ArrayList<Post> myPosts = new ArrayList<>();
-        myPosts.add(new Post(2, "title 2", "more randomness"));
-        myPosts.add(new Post(3, "title 3", "I need to eat"));
-        myPosts.add(new Post(4, "title 4", "need more protein"));
-
-        model.addAttribute("posts", myPosts);
-        return "/posts/index";
+        model.addAttribute("posts", postsDao.findAll());
+        return "posts/index";
     }
+
 
     @GetMapping("/posts/{id}")
     public String show(@PathVariable long id, Model model) {
-        Post post1 = new Post(id,"Monday", "Need to do cardio for 15 minutes, " +
-                "wearing hoodie");
-        model.addAttribute("title", post1.getTitle());
-        model.addAttribute("body", post1.getBody());
+        Post pullledPost = postsDao.getOne(id);
+        model.addAttribute("post", pullledPost);
+        User pullledUser = usersDao.getOne(id);
+        model.addAttribute("user", pullledUser);
         return "posts/show";
     }
 
     @GetMapping("/posts/create")
-    @ResponseBody
-    public String createPost(){
-
-        return "Here is the form to create a post!";
+    public String showPostForm(Model model){
+        model.addAttribute("post", new Post());
+        return "posts/create";
     }
 
     @PostMapping("/posts/create")
-    @ResponseBody
-    public String insertPost(){
-        return "Post has been created!";
+    public String createPost(@ModelAttribute Post post){
+        User user = usersDao.getOne(1L);
+        post.setAuthor(user);
+        postsDao.save(post);
+        return "redirect:/posts";
     }
+
+    @GetMapping("/posts/{id}/edit")
+    public String showEditForm(@PathVariable long id, Model model) {
+        // the below code will grab the id of the post the user wants to edit
+        // and sent it to the view
+        model.addAttribute("post", postsDao.getOne(id));
+        return "posts/edit";
+    }
+
+    @PostMapping("/posts/{id}/edit")
+    public String editPost(@PathVariable long id, @ModelAttribute Post post){
+        User user = usersDao.getOne(1L);
+        post.setAuthor(user);
+        postsDao.save(post);
+        return "redirect:/posts";
+    }
+
+
+    @RequestMapping("/posts/{id}/delete")
+    public String deleteForm(@PathVariable long id) {
+        postsDao.deleteById(id);
+        return "redirect:/posts";
+    }
+
+
 
 }

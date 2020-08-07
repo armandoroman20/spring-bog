@@ -1,5 +1,9 @@
 package com.codeup.springblog.models;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "ads")
@@ -15,6 +19,25 @@ public class Ad {
 
     @Column(columnDefinition = "TEXT NOT NULL")
     private String description;
+
+    /* this is referring to the Comment class
+    and useing the "parentAd" Ad that we defined in
+    that class
+     */
+    @OneToMany(mappedBy = "parentAd")
+    @JsonManagedReference
+    private List<Comment> comments;
+
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name="ad_tag",
+            joinColumns={@JoinColumn(name="ad_id")},
+            inverseJoinColumns={@JoinColumn(name="tag_id")}
+    )
+
+    @JsonManagedReference
+    private List<Tag> tags;
 
     public Ad() {
     }
@@ -43,6 +66,21 @@ public class Ad {
         this.description = description;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
     @Override
     public String toString() {
         return "Ad{" +
