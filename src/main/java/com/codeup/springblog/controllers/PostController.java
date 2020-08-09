@@ -5,6 +5,7 @@ import com.codeup.springblog.models.Post;
 import com.codeup.springblog.models.User;
 import com.codeup.springblog.repositories.PostRepository;
 import com.codeup.springblog.repositories.UserRepository;
+import com.codeup.springblog.services.EmailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +15,15 @@ public class PostController {
 
     private final PostRepository postsDao;
     private final UserRepository usersDao;
+    private final EmailService emailSvc;
 
-    public PostController(PostRepository postsDao, UserRepository usersDao){
+
+    public PostController(PostRepository postsDao, UserRepository usersDao, EmailService emailSvc){
         this.postsDao = postsDao;
         this.usersDao = usersDao;
+        this.emailSvc = emailSvc;
     }
-
-
+    
 
     // still need to refactor method like I have them in the ADController
     @GetMapping("/posts")
@@ -43,6 +46,7 @@ public class PostController {
     @GetMapping("/posts/create")
     public String showPostForm(Model model){
         model.addAttribute("post", new Post());
+        emailSvc.prepareAndSend(postsDao.getOne(1L), "Another Post!", "Post Created: You listed a new item for sale");
         return "posts/create";
     }
 
