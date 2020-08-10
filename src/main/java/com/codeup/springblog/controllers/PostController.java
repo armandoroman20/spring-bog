@@ -46,7 +46,6 @@ public class PostController {
     @GetMapping("/posts/create")
     public String showPostForm(Model model){
         model.addAttribute("post", new Post());
-        emailSvc.prepareAndSend(postsDao.getOne(1L), "Another Post!", "Post Created: You listed a new item for sale");
         return "posts/create";
     }
 
@@ -55,6 +54,7 @@ public class PostController {
         User user = usersDao.getOne(1L);
         post.setAuthor(user);
         postsDao.save(post);
+        emailSvc.prepareAndSend(postsDao.getOne(1L), "Another Post!", "Post Created: You listed a new item for sale");
         return "redirect:/posts";
     }
 
