@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Viewing all posts</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
+<nav th:replace="partials/navbar :: navbar" />
+
 <body>
 <!--    <div>-->
 <!--        <table>-->
@@ -37,8 +40,8 @@
             <div class="col-12" th:each="post : ${posts}">
                 <h2 th:text="${post.title}"></h2>
                 <p th:text="${post.body}"></p>
-                <p>Posted By: <span th:text="${#authentication.principal.username}"></span></p>
-                <!--                <p>Posted By: <span th:text="${post.author.email}"></span></p>-->
+
+                <p>Posted By: <span th:text="${post.author.email}"></span></p>
                 <a class="btn btn-primary" th:href="@{/posts/{id}/edit(id=${post.id})}" role="button">Edit</a>
                 <a class="btn btn-primary" th:href="@{/posts/{id}/delete(id=${post.id})}" role="button">Delete</a>
                 <hr>

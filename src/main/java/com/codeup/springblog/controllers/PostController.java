@@ -53,9 +53,9 @@ public class PostController {
     @PostMapping("/posts/create")
     public String createPost(@ModelAttribute Post post){
         User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        User user = usersDao.getOne(1L);
         post.setAuthor(loggedInUser);
         postsDao.save(post);
+//        Long loggedInId = loggedInUser.getId();
         emailSvc.prepareAndSend(postsDao.getOne(1L), "Another Post!", "Post Created: You listed a new item for sale");
         return "redirect:/posts";
     }
@@ -70,8 +70,9 @@ public class PostController {
 
     @PostMapping("/posts/{id}/edit")
     public String editPost(@PathVariable long id, @ModelAttribute Post post){
-        User user = usersDao.getOne(1L);
-        post.setAuthor(user);
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        User user = usersDao.getOne(1L);
+        post.setAuthor(loggedInUser);
         postsDao.save(post);
         return "redirect:/posts";
     }
