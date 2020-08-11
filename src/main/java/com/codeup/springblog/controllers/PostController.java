@@ -6,6 +6,7 @@ import com.codeup.springblog.models.User;
 import com.codeup.springblog.repositories.PostRepository;
 import com.codeup.springblog.repositories.UserRepository;
 import com.codeup.springblog.services.EmailService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -51,8 +52,9 @@ public class PostController {
 
     @PostMapping("/posts/create")
     public String createPost(@ModelAttribute Post post){
-        User user = usersDao.getOne(1L);
-        post.setAuthor(user);
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        User user = usersDao.getOne(1L);
+        post.setAuthor(loggedInUser);
         postsDao.save(post);
         emailSvc.prepareAndSend(postsDao.getOne(1L), "Another Post!", "Post Created: You listed a new item for sale");
         return "redirect:/posts";

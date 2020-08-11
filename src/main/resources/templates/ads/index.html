@@ -1,12 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
 <body>
+<nav th:replace="partials/navbar :: navbar" />
+<div sec:authorize="isAuthenticated()">
+    This content is only shown to authenticated users.
 
+    User ID: <span th:text="${#authentication.principal.id}"/>
+    Username: <span th:text="${#authentication.principal.username}"/>
+    Email: <span th:text="${#authentication.principal.email}"/>
+</div>
 <h1>Showing All Ads...</h1>
 
 <div th:each="ad : ${ads}">
