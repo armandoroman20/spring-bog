@@ -3,6 +3,8 @@
 <!--<head th:include="partials/head :: header-links">-->
     <title>Create Post</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<script type="text/javascript" src="https://static.filestackapi.com/v3/filestack.js"></script>
+
 </head>
 <body>
 
@@ -29,7 +31,55 @@
 
     <!--   **********  With form model binding **********-->
 
+
+
     <form th:action="@{'/posts/create'}" method="post" th:object="${post}">
+        <div class="form-group">
+<!--            <label for="image">Image</label>-->
+            <input type="BUTTON" value="Upload an Image" id="image" onclick="pickMark()">
+            <script>
+                var client = filestack.init("AYQfUbwHaR2yVhg0AatBVz");
+                //The function pickMark()
+                let imgUrl;
+                let imageSelection = document.querySelector('#imagePath');
+                console.log(imageSelection);
+
+                // function updateImage(){
+                //     imgUrl = imageSelection.value;
+                // }
+
+                function pickMark() {
+                    console.log("Picking Watermark");
+                    //Limiting file types and number for uploading in the picker
+                    client.pick({
+                        //Only accepting files with a mimetype 'image/*'
+                        accept: 'image/*',
+                        //Only accepting at most 1 file
+                        maxFiles:1,
+                    }).then(function(result) {//Taking the result object in as 'result'
+                        //Putting the result in a string, and printing it to the console
+                        // console.log(result);
+                        console.log(result.filesUploaded[0].url);
+
+                        // imgUrl = result.filesUploaded[0].url;
+                        // imgUrl = (JSON.stringify(result.filesUploaded[0].url));
+                        imgUrl = result.filesUploaded[0].url;
+                        console.log(imgUrl);
+                        // document.getElementById("submit").addEventListener("click", updateImage);
+                        document.getElementById('imagePath').value = imgUrl;
+                        // imageSelection = document.querySelector('#imagePath');
+                        console.log(imageSelection);
+                        console.log(imgUrl);
+                    })
+                }
+
+
+            </script>
+        </div>
+        <div class="form-group">
+            <label for="imagePath"></label>
+            <input type="hidden" value=imgUrl class="form-control" id="imagePath" th:field="*{imagePath}">
+        </div>
         <div class="form-group">
             <label for="title">Title</label>
             <input type="text" class="form-control" id="title" th:field="*{title}">
@@ -39,7 +89,8 @@
             <input type="text" class="form-control" id="body" th:field="*{body}">
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+
+        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
     </form>
 
 </main>

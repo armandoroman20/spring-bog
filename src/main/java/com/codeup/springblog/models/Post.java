@@ -21,15 +21,18 @@ public class Post {
     @Column(columnDefinition = "TEXT NOT NULL")
     private String body;
 
+    @Column(length = 150, unique = true)
+    private String imagePath;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User author;
 
-    public Post(String title, String body) {
-        this.title = title;
-        this.body = body;
-    }
+//    public Post(String title, String body) {
+//        this.title = title;
+//        this.body = body;
+//    }
 
     public User getAuthor() {
         return author;
@@ -41,16 +44,32 @@ public class Post {
 
     public Post() {}
 
-    public Post(long id, String title, String body) {
+//    public Post(long id, String title, String body) {
+//        this.id = id;
+//        this.title = title;
+//        this.body = body;
+//    }
+//
+//    public Post(String title, String body, User author) {
+//        this.title = title;
+//        this.body = body;
+//        this.author = author;
+//    }
+
+    public Post(long id, String title, String body, String imagePath, User author) {
         this.id = id;
         this.title = title;
         this.body = body;
+        this.author = author;
+        this.imagePath = imagePath;
     }
 
-    public Post(String title, String body, User author) {
-        this.title = title;
-        this.body = body;
-        this.author = author;
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public long getId() {

@@ -55,8 +55,12 @@ public class PostController {
         User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         post.setAuthor(loggedInUser);
         postsDao.save(post);
+
+
 //        Long loggedInId = loggedInUser.getId();
-        emailSvc.prepareAndSend(postsDao.getOne(1L), "Another Post!", "Post Created: You listed a new item for sale");
+        String currentSubject = post.getTitle();
+        String currentBody = post.getBody();
+        emailSvc.prepareAndSend(post, currentSubject, currentBody);
         return "redirect:/posts";
     }
 

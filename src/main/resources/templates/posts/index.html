@@ -40,7 +40,7 @@
             <div class="col-12" th:each="post : ${posts}">
                 <h2 th:text="${post.title}"></h2>
                 <p th:text="${post.body}"></p>
-
+                <img th:src="${post.getImagePath()}">
                 <p>Posted By: <span th:text="${post.author.email}"></span></p>
                 <a class="btn btn-primary" th:href="@{/posts/{id}/edit(id=${post.id})}" role="button">Edit</a>
                 <a class="btn btn-primary" th:href="@{/posts/{id}/delete(id=${post.id})}" role="button">Delete</a>

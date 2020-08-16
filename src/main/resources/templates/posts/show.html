@@ -6,8 +6,11 @@
     <title>Show</title>
 </head>
 <body>
+
     <h3 th:text="${post.title}"></h3>
     <h3 th:text="${post.body}"></h3>
+    <h3 th:text="${post.imagePath}"></h3>
+
     <h3 th:text="${post.author.email}"></h3>
 
 
@@ -17,5 +20,5 @@
         <button>Delete</button>
     </form>
 
-
+</body>
 </html>
